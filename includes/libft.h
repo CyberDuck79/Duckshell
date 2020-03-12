@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 13:45:31 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:02:05 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:47:24 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define NOT_FOUND -1
 # define SUCCESS 0
 # define END 0
+# define FAILURE 1
 # define LINE 1
 
 # ifndef BUFFER_SIZE

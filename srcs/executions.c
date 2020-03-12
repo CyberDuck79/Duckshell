@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 10:33:01 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:35:31 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:47:55 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ static int		pipe_start(t_cmd *cmd)
 		while (tmp_redir)
 		{
 			if (tmp_redir->std == STDOUT_FILENO)
-				return (EXIT_FAILURE);
+				return (FAILURE);
 			tmp_redir = tmp_redir->next;
 		}
 		return (SUCCESS);
 	}
-	return (EXIT_FAILURE);
+	return (FAILURE);
 }
 
 // to test
@@ -43,7 +43,7 @@ static int		pipe_end(t_cmd *cmd)
 	t_redir *tmp_redir;
 
 	if (cmd->pipe)
-		return (EXIT_FAILURE);
+		return (ERROR);
 	tmp_redir = cmd->redir_lst;
 	while (tmp_redir)
 	{
@@ -51,7 +51,7 @@ static int		pipe_end(t_cmd *cmd)
 			return (SUCCESS);
 		tmp_redir = tmp_redir->next;
 	}
-	return (EXIT_FAILURE);
+	return (FAILURE);
 }
 
 // to test
