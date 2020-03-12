@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:26:34 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/12 16:43:02 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:33:56 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,10 @@
 # define ERR_PROMPT_LEN 28
 # define HIDDEN "\n\033[0;32mDuckShell ('O)>\033[0m COIN COIN !?\n"
 # define HIDDEN_LEN 41
-# define CLEAR_KEYS "\033[2C\033[K"
+# define CLEAR_KEYS "\033[2D\033[K"
 # define CLEAR_LEN 7
 # define TOKEN_ERROR "microshell: syntax error near unexpected token `%s'\n"
 # define EXIT_ERROR(message) {perror(message); exit(errno);}
 # define RETURN_ERROR(message) {perror(message); return (ERROR);}
-
-char				**g_env;
-char				**g_env_path;
-t_var				*g_env_lst;
 
 #endif

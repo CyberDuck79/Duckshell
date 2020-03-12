@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 10:00:23 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/12 16:53:53 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:31:58 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void		free_path_tab(char **path_tab)
 }
 
 // OK
-void		free_env_lst(t_var *env_lst)
+void		*free_env_lst(t_var *env_lst)
 {
 	t_var	*tmp;
 
@@ -70,4 +70,5 @@ void		free_env_lst(t_var *env_lst)
 			free(tmp->value);
 		free(tmp);
 	}
+	return (NULL);
 }

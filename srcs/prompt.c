@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:10:04 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/12 15:09:00 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:11:20 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		prompt(char line[ARG_MAX], int ret)
 		strlcpy(line, "exit", 5);
 		write(STDOUT_FILENO, PROMPT, PROMPT_LEN);
 	}
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }
 
 // ajouter protection -> toujours utile avec un bon parsing ?
@@ -60,5 +60,5 @@ int		check_token(char line[ARG_MAX], char token[3])
 		while (*line != ' ' && *line)
 			line++;
 	}
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }

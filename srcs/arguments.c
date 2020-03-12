@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:15:21 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/12 17:02:48 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:28:03 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ static t_dir	get_redirection(char **line)
 {
 	t_dir	direction = NO_REDIR;
 
-	if (!strncmp(**line, ">>", 2))
+	if (!strncmp(*line, ">>", 2))
 		direction = ADD;
-	else if (!strncmp(**line, ">", 1))
+	else if (**line == '>')
 		direction = OUT;
-	else if (!strncmp(**line, "<", 1))
+	else if (**line == '<')
 		direction = IN;
 	if (direction)
 	{
@@ -32,19 +32,54 @@ static t_dir	get_redirection(char **line)
 	return (direction);
 }
 
+static void		double_quote_cpy(char **line, char **value)
+{
+	(*line)++;
+	while (**line && **line != '\"')
+	{
+		**value = **line;
+		(*value)++;
+		(*line)++;
+	}
+}
+
+static void		simple_quote_cpy(char **line, char **value)
+{
+	(*line)++;
+	while (**line && **line != '\'')
+	{
+		**value = **line;
+		(*value)++;
+		(*line)++;
+	}
+}
+
+static void		normal_cpy(char **line, char **value)
+{
+	while (!IS_TOKEN(**line))
+	{
+		**value = **line;
+		(*value)++;
+		(*line)++;
+	}
+}
+
 // faire les 3 fonctions de copie d'argument
 static int		get_arg(char **line, char *value)
 {
 	if (IS_TOKEN(**line))
 		return (ERROR);
 	if (**line == '"')
-		double_quote_cpy(&value, line);
-	else (**line == "\'")
-		simple_quote_cpy(&value, line);
+		double_quote_cpy(line, &value);
+	else if (**line == '\'')
+		simple_quote_cpy(line, &value);
 	else
-		normal_cpy(&value, line);
+		normal_cpy(line, &value);
 	if (IS_TOKEN(**line))
-		return (EXIT_SUCCESS);
+	{
+		*value = '\0';
+		return (SUCCESS);
+	}
 	return (get_arg(line, value));
 }
 
@@ -54,12 +89,14 @@ int				parse_args(char **line, t_arg **arg)
 	while (**line == ' ')
 		(*line)++;
 	if (IS_TOKEN(**line))
-		return (EXIT_SUCCESS);
+		return (ERROR);
 	if ((*arg = ft_calloc(1, sizeof(t_arg))) == NULL)
-		return (NULL);
+		return (ERROR);
 	(*arg)->direction = get_redirection(line);
 	if (get_arg(line, (*arg)->value) == ERROR)
 		return (ERROR);
+	if (IS_TOKEN(**line))
+		return (SUCCESS);
 	return (parse_args(line, &(*arg)->next));
 }
 

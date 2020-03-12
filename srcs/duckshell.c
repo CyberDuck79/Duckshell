@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 20:06:14 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/12 16:52:27 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:38:11 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,17 @@ static void	duckshell(void)
 	{
 		if (!strcmp("coin coin !", line))
 			write(STDOUT_FILENO, HIDDEN, HIDDEN_LEN);
-		if (check_token(line, token))
-			dprintf(STDERR_FILENO, TOKEN_ERROR, token);
-		else if (parse_cmds(line, &cmd_lst, 0) == ERROR)
-			perror("DuckShell: commands parsing");
-		else if (parse_redir(cmd_lst) == ERROR)
-			perror("DuckShell: redirections");
-		ret_code = execute_cmds(cmd_lst);
-		free_cmd_lst(&cmd_lst);
+		else
+		{
+			if (check_token(line, token))
+				dprintf(STDERR_FILENO, TOKEN_ERROR, token);
+			else if (parse_cmds(line, &cmd_lst) == ERROR)
+				perror("DuckShell: commands parsing");
+			else if (parse_redir(cmd_lst) == ERROR)
+				perror("DuckShell: redirections");
+			ret_code = execute_cmds(cmd_lst);
+			free_cmd_lst(&cmd_lst);
+		}
 		prompt(line, ret_code);
 	}
 }

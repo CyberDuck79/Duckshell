@@ -6,12 +6,14 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:24:01 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/12 14:10:26 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:17:31 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DUCKSHELL_STRUCTS_H
 # define DUCKSHELL_STRUCTS_H
+
+# include <stdlib.h>
 
 # define MAX_ARG_STRLEN 131072
 

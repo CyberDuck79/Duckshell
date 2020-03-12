@@ -6,10 +6,11 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 10:33:01 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/12 16:51:42 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:35:31 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "environment.h"
 #include "executions.h"
 #include "redirections.h"
 #include "signals.h"
@@ -31,7 +32,7 @@ static int		pipe_start(t_cmd *cmd)
 				return (EXIT_FAILURE);
 			tmp_redir = tmp_redir->next;
 		}
-		return (EXIT_SUCCESS);
+		return (SUCCESS);
 	}
 	return (EXIT_FAILURE);
 }
@@ -47,7 +48,7 @@ static int		pipe_end(t_cmd *cmd)
 	while (tmp_redir)
 	{
 		if (tmp_redir->std == STDIN_FILENO)
-			return (EXIT_SUCCESS);
+			return (SUCCESS);
 		tmp_redir = tmp_redir->next;
 	}
 	return (EXIT_FAILURE);
@@ -56,9 +57,9 @@ static int		pipe_end(t_cmd *cmd)
 // to test
 static t_cmd	*next_node(t_cmd *cmd)
 {
-	if (pipe_start(cmd) == EXIT_SUCCESS)
+	if (pipe_start(cmd) == SUCCESS)
 	{
-		if (pipe_end(cmd->next) == EXIT_SUCCESS)
+		if (pipe_end(cmd->next) == SUCCESS)
 			return (cmd->next);
 		else if (!cmd->next->pipe)
 			return (cmd->next->next);
@@ -77,7 +78,7 @@ void	dup_stdio(int pipe_fd[2], int std_fileno)
 		EXIT_ERROR("close")
 }
 
-void	execute_command(t_cmd *cmd)
+void	execute_cmd(t_cmd *cmd)
 {
 	if (apply_redir(cmd->redir_lst) != ERROR)
 		if (execve(get_bin(cmd->argv[0], g_env_path), cmd->argv, g_env) == ERROR)
@@ -110,7 +111,7 @@ void	execute_pipes(t_cmd *cmd, int pipe_in, int parent_fd[2])
 }
 
 // calcul a faire sur le status pour le code de retour ?
-static int		wait_for_childs(void)
+static int		wait_childs(void)
 {
 	int	status;
 	int	last_status;
@@ -145,7 +146,7 @@ int				execute_cmds(t_cmd *cmd_lst)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			if (pipe_start(exec.cmd_node) == EXIT_SUCCESS)
+			if (pipe_start(exec.cmd_node) == SUCCESS)
 				execute_pipes(exec.cmd_node, 0, 0);
 			else
 				execute_cmd(exec.cmd_node);
