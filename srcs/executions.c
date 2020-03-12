@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 10:33:01 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:47:55 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 00:50:24 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,10 @@ void	dup_stdio(int pipe_fd[2], int std_fileno)
 
 void	execute_cmd(t_cmd *cmd)
 {
-	if (apply_redir(cmd->redir_lst) != ERROR)
-		if (execve(get_bin(cmd->argv[0], g_env_path), cmd->argv, g_env) == ERROR)
-			EXIT_ERROR(cmd->argv[0])
+	if (apply_redir(cmd->redir_lst) == ERROR)
+		perror(cmd->argv[0]);
+	else if (execve(get_bin(cmd->argv[0], g_env_path), cmd->argv, g_env) == ERROR)
+		EXIT_ERROR(cmd->argv[0])
 }
 
 // to test
