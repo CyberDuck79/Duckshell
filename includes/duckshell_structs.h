@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:24:01 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:17:31 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 14:09:21 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,9 @@ typedef struct		s_cmd
 	struct s_cmd	*next;
 	t_arg			*arg_lst;
 	char			**argv;
+	char			*path;
 	t_redir			*redir_lst;
 	int				pipe;
 }					t_cmd;
-
-typedef struct		s_exec
-{
-	pid_t			pid;
-	t_cmd			*cmd_node;
-	int				ret;
-}					t_exec;
 
 #endif

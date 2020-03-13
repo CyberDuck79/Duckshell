@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 20:06:14 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:38:11 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 12:24:48 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ static void	duckshell(void)
 {
 	char	line[ARG_MAX];
 	char	token[3];
-	int		ret_code;
+	int		ret_code = 0;
 	t_cmd	*cmd_lst = NULL;
 
-	prompt(line, 0);
+	prompt(line, ret_code);
 	while (strcmp("exit", line))
 	{
 		if (!strcmp("coin coin !", line))

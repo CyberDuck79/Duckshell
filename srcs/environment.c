@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 20:19:59 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:33:17 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 12:21:24 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,5 @@ char		*get_bin(char *name, char **path)
 		}
 		path++;
 	}
-	return (NULL);
+	return (name);
 }

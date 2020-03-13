@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:15:21 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:28:03 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 12:35:59 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,16 @@ int				parse_args(char **line, t_arg **arg)
 {
 	while (**line == ' ')
 		(*line)++;
-	if (IS_TOKEN(**line))
+	if (IS_SEP(**line))
 		return (ERROR);
 	if ((*arg = ft_calloc(1, sizeof(t_arg))) == NULL)
 		return (ERROR);
 	(*arg)->direction = get_redirection(line);
 	if (get_arg(line, (*arg)->value) == ERROR)
 		return (ERROR);
-	if (IS_TOKEN(**line))
+	while (**line == ' ')
+		(*line)++;
+	if (IS_SEP(**line))
 		return (SUCCESS);
 	return (parse_args(line, &(*arg)->next));
 }

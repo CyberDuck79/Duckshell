@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 10:00:23 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:31:58 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 12:25:29 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void		free_cmd_lst(t_cmd **cmd_lst)
 		free_lst((t_list*)tmp_cmd->arg_lst);
 		free_lst((t_list*)tmp_cmd->redir_lst);
 		free(tmp_cmd->argv);
+		free(tmp_cmd->path);
 		free(tmp_cmd);
 	}
 }

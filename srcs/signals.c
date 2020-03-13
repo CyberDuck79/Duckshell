@@ -6,11 +6,12 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 13:54:50 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/09 11:35:02 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 12:08:26 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signals.h"
+#include "prompt.h"
 
 void	signal_handler(int sig)
 {

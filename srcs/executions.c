@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 10:33:01 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:51:35 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 14:28:55 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,63 +18,11 @@
 
 // diviser le ficher -> mettre dans commands certaines fonctions
 
-// to test
-static int		pipe_start(t_cmd *cmd)
+void	dup_stdio(int pipe_fd, int std_fileno)
 {
-	t_redir	*tmp_redir;
-
-	if (cmd->pipe)
-	{
-		tmp_redir = cmd->redir_lst;
-		while (tmp_redir)
-		{
-			if (tmp_redir->std == STDOUT_FILENO)
-				return (FAILURE);
-			tmp_redir = tmp_redir->next;
-		}
-		return (SUCCESS);
-	}
-	return (FAILURE);
-}
-
-// to test
-static int		pipe_end(t_cmd *cmd)
-{
-	t_redir *tmp_redir;
-
-	if (cmd->pipe)
-		return (ERROR);
-	tmp_redir = cmd->redir_lst;
-	while (tmp_redir)
-	{
-		if (tmp_redir->std == STDIN_FILENO)
-			return (SUCCESS);
-		tmp_redir = tmp_redir->next;
-	}
-	return (FAILURE);
-}
-
-// to test
-static t_cmd	*next_node(t_cmd *cmd)
-{
-	if (pipe_start(cmd) == SUCCESS)
-	{
-		if (pipe_end(cmd->next) == SUCCESS)
-			return (cmd->next);
-		else if (!cmd->next->pipe)
-			return (cmd->next->next);
-		cmd = cmd->next;
-	}
-	return (cmd->next);
-}
-
-void	dup_stdio(int pipe_fd[2], int std_fileno)
-{
-	if (dup2(pipe_fd[std_fileno], std_fileno) == ERROR)
+	if (dup2(pipe_fd, std_fileno) == ERROR)
 		EXIT_ERROR("dup2")
-	if (close(pipe_fd[1]) == ERROR)
-		EXIT_ERROR("close")
-	if (close(pipe_fd[0]) == ERROR)
+	if (close(pipe_fd) == ERROR)
 		EXIT_ERROR("close")
 }
 
@@ -82,32 +30,7 @@ void	execute_cmd(t_cmd *cmd)
 {
 	if (apply_redir(cmd->redir_lst) == ERROR)
 		EXIT_ERROR(cmd->argv[0])
-	if (execve(get_bin(cmd->argv[0], g_env_path), cmd->argv, g_env) == ERROR)
-		EXIT_ERROR(cmd->argv[0])
-}
-
-// to test
-void	execute_pipes(t_cmd *cmd, int pipe_in, int parent_fd[2])
-{
-	pid_t	pid;
-	int		pipe_fd[2];
-
-	if (pipe_in)
-		dup_stdio(parent_fd, STDIN_FILENO);
-	if (cmd->pipe)
-	{
-		if (pipe(pipe_fd) == ERROR)
-			EXIT_ERROR("pipe")
-		if (pipe_end(cmd->next) == EXIT_FAILURE)
-		{
-			if ((pid = fork()) == ERROR)
-				EXIT_ERROR("fork")
-			if (pid == 0)
-				execute_pipes(cmd->next, 1, pipe_fd);
-		}
-		dup_stdio(pipe_fd, STDOUT_FILENO);
-	}
-	if (execve(get_bin(cmd->argv[0], g_env_path), cmd->argv, g_env) == ERROR)
+	if (execve(cmd->path, cmd->argv, g_env) == ERROR)
 		EXIT_ERROR(cmd->argv[0])
 }
 
@@ -135,27 +58,33 @@ static int		wait_childs(void)
 // code de retour
 int				execute_cmds(t_cmd *cmd_lst)
 {
-	t_exec	exec;
+	pid_t	pid;
+	int		pipe_fd[2];
+	int		pipe_in = 0;
+	t_cmd	*cmd = cmd_lst;
 
-	bzero(&exec, sizeof(t_exec));
-	exec.cmd_node = cmd_lst;
-	while (exec.cmd_node)
+	bzero(pipe_fd, sizeof(pipe_fd));
+	while (cmd)
 	{
-		if ((exec.pid = fork()) == ERROR)
+		if (pipe_fd[0])
+			pipe_in = pipe_fd[0];
+		if (cmd->pipe && pipe(pipe_fd) == ERROR)
+			RETURN_ERROR("pipe")
+		else if (!cmd->pipe)
+			bzero(pipe_fd, sizeof(pipe_fd));
+		if ((pid = fork()) == ERROR)
 			EXIT_ERROR("fork")
-		if (exec.pid == 0)
+		if (pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			if (pipe_start(exec.cmd_node) == SUCCESS)
-				execute_pipes(exec.cmd_node, 0, 0);
-			else
-				execute_cmd(exec.cmd_node);
+			if (pipe_in)
+				dup_stdio(pipe_in, STDIN_FILENO);
+			if (cmd->pipe)
+				dup_stdio(pipe_fd[1], STDOUT_FILENO);
+			execute_cmd(cmd);
 		}
-		exec.cmd_node = next_node(exec.cmd_node);
-		signal(SIGINT, parent_handler);
-		exec.ret = wait_childs();
-		signal(SIGINT, signal_handler);
+		cmd = cmd->next;
 	}
-	return (exec.ret);
+	return (wait_childs());
 }

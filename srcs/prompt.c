@@ -6,11 +6,13 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:10:04 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 00:11:20 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/13 12:34:25 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prompt.h"
+#include "signals.h"
+#include "arguments.h"
 
 // voir pour ne pas avoir besoin de close la ligne par \0 -> arrêt à \n
 int		prompt(char line[ARG_MAX], int ret)
@@ -26,7 +28,7 @@ int		prompt(char line[ARG_MAX], int ret)
 		read_index = read_status;
 		while (line[read_index - 1] != '\n')
 		{
-			write(STDOUT_FILENO, CLEAR_KEYS, CLEAR_LEN);
+			write(STDOUT_FILENO, CLEAR_EOF, CLEAR_EOF_LEN);
 			read_status = read(STDIN_FILENO, &line[read_index], ARG_MAX);
 			if (read_status == ERROR)
 				RETURN_ERROR("DuckShell: commandline reading")
@@ -36,6 +38,7 @@ int		prompt(char line[ARG_MAX], int ret)
 	}
 	else
 	{
+		write(STDOUT_FILENO, CLEAR_EOF, CLEAR_EOF_LEN);
 		strlcpy(line, "exit", 5);
 		write(STDOUT_FILENO, PROMPT, PROMPT_LEN);
 	}
@@ -57,7 +60,9 @@ int		check_token(char line[ARG_MAX], char token[3])
 			return (ft_strcpy(token, ";"));
 		if (*line == '|')
 			return (ft_strcpy(token, "|"));
-		while (*line != ' ' && *line)
+		while (!IS_SEP(*line))
+			line++;
+		if (*line)
 			line++;
 	}
 	return (SUCCESS);

@@ -6,7 +6,7 @@
 #    By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/18 11:52:41 by fhenrion          #+#    #+#              #
-#    Updated: 2020/03/11 16:34:39 by fhenrion         ###   ########.fr        #
+#    Updated: 2020/03/13 12:17:51 by fhenrion         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ INCLUDES_PATH = ./includes/
 LIB = libft.a
 
 CC = gcc
-CFLAGS = -Werror -Wall -Wextra
+CFLAGS = -Werror -Wall -Wextra -g
 
 .PHONY: clean fclean all re bonus
 
@@ -37,14 +37,11 @@ objs/%.o : srcs/%.c
 	$(CC) -c $(CFLAGS) -I$(INCLUDES_PATH) $< -o $@
 
 clean:
-	@/bin/rm -f $(SRC_O)
-	@make -C libft clean
-	@make -C libprintf clean
+	@/bin/rm -f $(OBJS)
 	@echo "\033[0;32mObjects files cleaning OK\033[0m"
 
 fclean: clean
 	@/bin/rm -f $(NAME)
-	@/bin/rm -f $(LIB)
 	@echo "\033[0;32mexecutable cleaning OK\033[0m"
 
 re: fclean $(NAME)
