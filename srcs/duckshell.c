@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 20:06:14 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/04/07 12:42:27 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 15:50:46 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	duckshell(t_env *env)
 	{
 		if (!strcmp("coin coin !", line))
 			write(STDOUT, HIDDEN, HIDDEN_LEN);
-		else
+		else if (line[0] != '\n')
 		{
 			if (check_token(line, token))
 				dprintf(STDERR, TOKEN_ERROR, token);

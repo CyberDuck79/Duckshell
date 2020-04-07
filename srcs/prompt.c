@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:10:04 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/04/07 11:28:53 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 15:57:25 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int		prompt(char line[ARG_MAX], int ret)
 	write(STDOUT, ret ? ERR_PROMPT : PROMPT, PROMPT_LEN);
 	if ((status = read(STDIN, line, ARG_MAX)) == ERROR)
 		RETURN_ERROR("DuckShell: commandline reading")
+	else if (status && *line == '\n')
+		return (SUCCESS);
 	else if (status)
 	{
 		index = status;
@@ -35,13 +37,10 @@ int		prompt(char line[ARG_MAX], int ret)
 			index += status;
 		}
 		line[index - 1] = '\0';
+		return (SUCCESS);
 	}
-	else
-	{
-		write(STDOUT, CLEAR_EOF, CLEAR_EOF_LEN);
-		strlcpy(line, "exit", 5);
-		write(STDOUT, PROMPT, PROMPT_LEN);
-	}
+	write(STDOUT, CLEAR_EOF, CLEAR_EOF_LEN);
+	strlcpy(line, "exit", 5);
 	return (SUCCESS);
 }
 
