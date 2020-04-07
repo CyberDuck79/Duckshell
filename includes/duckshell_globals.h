@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:26:34 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 12:00:44 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 11:29:37 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 # include "libft.h"
 # include "duckshell_structs.h"
 
+# define STDIN STDIN_FILENO
+# define STDOUT STDOUT_FILENO
+# define STDERR STDERR_FILENO
 # define TOKEN_ERROR "microshell: syntax error near unexpected token `%s'\n"
 # define EXIT_ERROR(message) {perror(message); exit(errno);}
 # define RETURN_ERROR(message) {perror(message); return (ERROR);}

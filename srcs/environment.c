@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 20:19:59 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 12:21:24 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 12:52:40 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,31 @@ char			**get_path(char *env[])
 	return (NULL);
 }
 
-t_var			*env_lst_conv(char *env[])
+t_var			*env_list_conv(char *env[])
 {
-	t_var	*env_lst;
-	t_var	*env_var;
+	t_var	*env_list;
+	t_var	**env_var;
 
-	if ((env_lst = malloc(sizeof(t_var))) == NULL)
-		return (NULL);
-	env_var = env_lst;
+	if ((env_list = malloc(sizeof(t_var))) == NULL)
+		return (free_env_list(env_list));
+	env_var = &env_list;
 	while (*env)
 	{
-		if ((env_var->key = ft_substrchr(*env, '=')) == NULL)
-			return (free_env_lst(env_lst));
-		if ((env_var->value = ft_substrrchr(*env, '=')) == NULL)
-			return (free_env_lst(env_lst));
+		if (((*env_var)->key = ft_substrchr(*env, '=')) == NULL)
+			return (free_env_list(env_list));
+		if (((*env_var)->value = ft_substrrchr(*env, '=')) == NULL)
+			return (free_env_list(env_list));
 		env++;
-		if (*env && ((env_var->next = malloc(sizeof(t_var))) == NULL))
-			return (free_env_lst(env_lst));
-		env_var = env_var->next;
+		if (*env)
+		{
+			if (((*env_var)->next = malloc(sizeof(t_var))) == NULL)
+				return (free_env_list(env_list));
+			env_var = &(*env_var)->next;
+		}
+		else
+			(*env_var)->next = NULL;
 	}
-	return (env_lst);
+	return (env_list);
 }
 
 static char	*path_join(char *path, char *name)
@@ -87,5 +92,5 @@ char		*get_bin(char *name, char **path)
 		}
 		path++;
 	}
-	return (name);
+	return (strdup(name));
 }

@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:18:41 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 12:24:33 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 12:19:49 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 // voir pour placer des fonctions ici ?
 
 // OK
-int			parse_cmds(char line[ARG_MAX], t_cmd **cmd)
+int			parse_cmds(char line[ARG_MAX], t_cmd **cmd, char **path)
 {
 	if ((*cmd = ft_calloc(1, sizeof(t_cmd))) == NULL)
 		return (ERROR);
@@ -25,11 +25,11 @@ int			parse_cmds(char line[ARG_MAX], t_cmd **cmd)
 		return (ERROR);
 	if (((*cmd)->argv = arg_conv((*cmd)->arg_lst)) == NULL)
 		return (ERROR);
-	if (((*cmd)->path = get_bin((*cmd)->argv[0], g_env_path)) == NULL)
+	if (((*cmd)->path = get_bin((*cmd)->argv[0], path)) == NULL)
 		return (ERROR);
 	if (!*line)
 		return (SUCCESS);
 	if (*line == '|')
 		(*cmd)->pipe = OUT;
-	return (parse_cmds(line + 1, &(*cmd)->next));
+	return (parse_cmds(line + 1, &(*cmd)->next, path));
 }

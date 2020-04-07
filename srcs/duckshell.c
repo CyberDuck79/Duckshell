@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 20:06:14 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 12:24:48 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 12:42:27 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@
 
 #define VOID_ARGS (void)argc;(void)argv
 
-// corriger le clear des keys
 // test comportement code retour
-static void	duckshell(void)
+static void	duckshell(t_env *env)
 {
 	char	line[ARG_MAX];
 	char	token[3];
@@ -33,37 +32,39 @@ static void	duckshell(void)
 	while (strcmp("exit", line))
 	{
 		if (!strcmp("coin coin !", line))
-			write(STDOUT_FILENO, HIDDEN, HIDDEN_LEN);
+			write(STDOUT, HIDDEN, HIDDEN_LEN);
 		else
 		{
 			if (check_token(line, token))
-				dprintf(STDERR_FILENO, TOKEN_ERROR, token);
-			else if (parse_cmds(line, &cmd_lst) == ERROR)
+				dprintf(STDERR, TOKEN_ERROR, token);
+			else if (parse_cmds(line, &cmd_lst, env->path) == ERROR)
 				perror("DuckShell: commands parsing");
 			else if (parse_redir(cmd_lst) == ERROR)
 				perror("DuckShell: redirections");
-			ret_code = execute_cmds(cmd_lst);
-			free_cmd_lst(&cmd_lst);
+			ret_code = execute_cmds(cmd_lst, env->tab);
+			free_cmd_list(&cmd_lst);
 		}
 		prompt(line, ret_code);
 	}
 }
 
 // OK
-int			main(int argc, char **argv, char **env)
+int			main(int argc, char **argv, char **env_tab)
 {
+	t_env	env;
+
 	VOID_ARGS;
-	g_env = env;
-	if ((g_env_path = get_path(env)) == NULL)
+	env.tab = env_tab;
+	if ((env.path = get_path(env_tab)) == NULL)
 		EXIT_ERROR("duckshell: environment variables")
-	if ((g_env_lst = env_lst_conv(env)) == NULL)
+	if ((env.list = env_list_conv(env_tab)) == NULL)
 		EXIT_ERROR("duckshell: environment variables")
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
-	duckshell();
-	dprintf(STDOUT_FILENO, "exit\n");
-	free_path_tab(g_env_path);
-	free_env_lst(g_env_lst);
-	system("leaks duckshell");
+	duckshell(&env);
+	write(STDOUT, "exit\n", 5);
+	free_path_tab(env.path);
+	free_env_list(env.list);
+	//system("leaks duckshell"); --> disable fsanitize to use leaks
 	return (EXIT_SUCCESS);
 }

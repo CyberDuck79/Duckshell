@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 10:00:23 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 12:25:29 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 12:19:55 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ static void	free_lst(t_list *lst)
 }
 
 // OK
-void		free_cmd_lst(t_cmd **cmd_lst)
+void		free_cmd_list(t_cmd **cmd_list)
 {
 	t_cmd	*tmp_cmd;
 
-	while (*cmd_lst)
+	while (*cmd_list)
 	{
-		tmp_cmd = *cmd_lst;
-		*cmd_lst = tmp_cmd->next;
+		tmp_cmd = *cmd_list;
+		*cmd_list = tmp_cmd->next;
 		free_lst((t_list*)tmp_cmd->arg_lst);
 		free_lst((t_list*)tmp_cmd->redir_lst);
 		free(tmp_cmd->argv);
@@ -57,14 +57,14 @@ void		free_path_tab(char **path_tab)
 }
 
 // OK
-void		*free_env_lst(t_var *env_lst)
+void		*free_env_list(t_var *env_list)
 {
 	t_var	*tmp;
 
-	while (env_lst)
+	while (env_list)
 	{
-		tmp = env_lst;
-		env_lst = env_lst->next;
+		tmp = env_list;
+		env_list = env_list->next;
 		if (tmp->key)
 			free(tmp->key);
 		if (tmp->value)

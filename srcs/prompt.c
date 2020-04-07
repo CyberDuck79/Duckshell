@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:10:04 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 12:34:25 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 11:28:53 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,32 @@
 #include "arguments.h"
 
 // voir pour ne pas avoir besoin de close la ligne par \0 -> arrêt à \n
+// mettre retour dans $?
 int		prompt(char line[ARG_MAX], int ret)
 {
-	ssize_t	read_status;
-	ssize_t	read_index;
+	ssize_t	status;
+	ssize_t	index;
 
-	ft_putstr(ret ? ERR_PROMPT : PROMPT);
-	if ((read_status = read(STDIN_FILENO, line, ARG_MAX)) == ERROR)
+	write(STDOUT, ret ? ERR_PROMPT : PROMPT, PROMPT_LEN);
+	if ((status = read(STDIN, line, ARG_MAX)) == ERROR)
 		RETURN_ERROR("DuckShell: commandline reading")
-	else if (read_status)
+	else if (status)
 	{
-		read_index = read_status;
-		while (line[read_index - 1] != '\n')
+		index = status;
+		while (line[index - 1] != '\n')
 		{
-			write(STDOUT_FILENO, CLEAR_EOF, CLEAR_EOF_LEN);
-			read_status = read(STDIN_FILENO, &line[read_index], ARG_MAX);
-			if (read_status == ERROR)
+			write(STDOUT, CLEAR_EOF, CLEAR_EOF_LEN);
+			if ((status = read(STDIN, &line[index], ARG_MAX)) == ERROR)
 				RETURN_ERROR("DuckShell: commandline reading")
-			read_index += read_status;
+			index += status;
 		}
-		line[read_index - 1] = '\0';
+		line[index - 1] = '\0';
 	}
 	else
 	{
-		write(STDOUT_FILENO, CLEAR_EOF, CLEAR_EOF_LEN);
+		write(STDOUT, CLEAR_EOF, CLEAR_EOF_LEN);
 		strlcpy(line, "exit", 5);
-		write(STDOUT_FILENO, PROMPT, PROMPT_LEN);
+		write(STDOUT, PROMPT, PROMPT_LEN);
 	}
 	return (SUCCESS);
 }

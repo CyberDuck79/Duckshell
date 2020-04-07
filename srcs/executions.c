@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 10:33:01 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 14:28:55 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 13:08:20 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ void	dup_stdio(int pipe_fd, int std_fileno)
 		EXIT_ERROR("close")
 }
 
-void	execute_cmd(t_cmd *cmd)
+void	execute_cmd(t_cmd *cmd, char **env)
 {
 	if (apply_redir(cmd->redir_lst) == ERROR)
 		EXIT_ERROR(cmd->argv[0])
-	if (execve(cmd->path, cmd->argv, g_env) == ERROR)
+	if (execve(cmd->path, cmd->argv, env) == ERROR)
 		EXIT_ERROR(cmd->argv[0])
 }
 
@@ -46,8 +46,8 @@ static int		wait_childs(void)
 		perror("duckshell");
 	if (WIFSIGNALED(last_status) && (WTERMSIG(last_status) == SIGQUIT))
 	{
-		write(STDERR_FILENO, "Quit: 3", 8);
-		write(STDOUT_FILENO, "\n", 1);
+		write(STDERR, "Quit: 3", 8);
+		write(STDOUT, "\n", 1);
 	}
 	return (last_status);
 }
@@ -56,7 +56,8 @@ static int		wait_childs(void)
 // execution des pipes
 // calcul de la commande suivante
 // code de retour
-int				execute_cmds(t_cmd *cmd_lst)
+/*
+int				execute_cmds(t_cmd *cmd_lst, char **env)
 {
 	pid_t	pid;
 	int		pipe_fd[2];
@@ -66,7 +67,7 @@ int				execute_cmds(t_cmd *cmd_lst)
 	bzero(pipe_fd, sizeof(pipe_fd));
 	while (cmd)
 	{
-		if (pipe_fd[0])
+		if (pipe_fd[1])
 			pipe_in = pipe_fd[0];
 		if (cmd->pipe && pipe(pipe_fd) == ERROR)
 			RETURN_ERROR("pipe")
@@ -79,12 +80,19 @@ int				execute_cmds(t_cmd *cmd_lst)
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
 			if (pipe_in)
-				dup_stdio(pipe_in, STDIN_FILENO);
+				dup_stdio(pipe_in, STDIN);
 			if (cmd->pipe)
-				dup_stdio(pipe_fd[1], STDOUT_FILENO);
-			execute_cmd(cmd);
+				dup_stdio(pipe_fd[1], STDOUT);
+			execute_cmd(cmd, env);
 		}
+		if (pipe_in)
+			wait_childs();
 		cmd = cmd->next;
 	}
 	return (wait_childs());
+}
+*/
+int				execute_cmds(t_cmd *cmd_lst, char **env)
+{
+	
 }

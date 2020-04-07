@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 11:24:01 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 14:09:21 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 11:07:32 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ typedef struct		s_var
 	char			*key;
 	char			*value;
 }					t_var;
+
+typedef struct		s_env
+{
+	char			**tab;
+	char			**path;
+	t_var			*list;
+}					t_env;
 
 typedef struct		s_arg
 {

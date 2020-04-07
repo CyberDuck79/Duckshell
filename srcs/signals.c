@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/01 13:54:50 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 12:08:26 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/04/07 11:33:13 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	signal_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(STDOUT_FILENO, CLEAR_KEYS, CLEAR_LEN);
-		write(STDOUT_FILENO, PROMPT, PROMPT_LEN);
+		write(STDOUT, CLEAR_KEYS, CLEAR_KEYS_LEN);
+		write(STDOUT, PROMPT, PROMPT_LEN);
 	}
 	if (sig == SIGQUIT)
-		write(STDOUT_FILENO, CLEAR_KEYS, CLEAR_LEN);
+		write(STDOUT, CLEAR_KEYS, CLEAR_KEYS_LEN);
 }
 
 void	parent_handler(int sig)

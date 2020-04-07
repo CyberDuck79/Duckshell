@@ -6,7 +6,7 @@
 #    By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/18 11:52:41 by fhenrion          #+#    #+#              #
-#    Updated: 2020/03/13 12:17:51 by fhenrion         ###   ########.fr        #
+#    Updated: 2020/04/07 12:04:46 by fhenrion         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ INCLUDES_PATH = ./includes/
 LIB = libft.a
 
 CC = gcc
-CFLAGS = -Werror -Wall -Wextra -g
+CFLAGS = -Werror -Wall -Wextra -g -fsanitize=address
 
 .PHONY: clean fclean all re bonus
 
